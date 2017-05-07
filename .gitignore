@@ -1,0 +1,18 @@
+
+#
+# General
+#
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+
+#
+# Quantus
+#
+db/
+incremental_db/
+output_files/
+simulation/
+*.rpt
