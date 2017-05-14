@@ -7,10 +7,12 @@ module manchester_encoder (rst_n, clk2x, din, enable, dout, ready);
     begin 
         if (clk2x) 
         begin 
+            // posedge
             din_buf   <= din;   
             state     <= 0;            
         end 
         else begin            
+            // negedge
             state     <= 1;            
         end
     end 
@@ -18,8 +20,8 @@ module manchester_encoder (rst_n, clk2x, din, enable, dout, ready);
     always @(posedge clk2x or negedge enable or negedge rst_n)
     begin
         if (!rst_n) 
-        begin
-            ready_reg = 0;
+        begin            
+            ready_reg = 0;  // reset
         end
         else begin
             if (!enable)
@@ -29,6 +31,6 @@ module manchester_encoder (rst_n, clk2x, din, enable, dout, ready);
         end
     end 
 
-    assign dout  = rst_n & ready_reg & (state ^ din_buf);  
+    assign dout  = ready_reg & (state ^ din_buf);  
     assign ready = ready_reg;
 endmodule
