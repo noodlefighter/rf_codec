@@ -1,6 +1,6 @@
 module manchester_encoder (
     input  rst_n, clk2x, din, enable,
-    output dout, ready
+    output dout
 );   
 
     reg    odevity, ready_buf, out_buf;
