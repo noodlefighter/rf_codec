@@ -7,10 +7,10 @@
 vlib work
 vlog -work work rf_encoder.vo
 vlog -work work Waveform.vwf.vt
-vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.miller_encoder_vlg_vec_tst
+vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.manchester_encoder_vlg_vec_tst
 vcd file -direction rf_encoder.msim.vcd
-vcd add -internal miller_encoder_vlg_vec_tst/*
-vcd add -internal miller_encoder_vlg_vec_tst/i1/*
+vcd add -internal manchester_encoder_vlg_vec_tst/*
+vcd add -internal manchester_encoder_vlg_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -20,6 +20,8 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
+
 
 
 </modelsim_script>
@@ -27,10 +29,10 @@ quit -f
 vlib work
 vlog -work work rf_encoder.vo
 vlog -work work Waveform.vwf.vt
-vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.miller_encoder_vlg_vec_tst
+vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.manchester_encoder_vlg_vec_tst
 vcd file -direction rf_encoder.msim.vcd
-vcd add -internal miller_encoder_vlg_vec_tst/*
-vcd add -internal miller_encoder_vlg_vec_tst/i1/*
+vcd add -internal manchester_encoder_vlg_vec_tst/*
+vcd add -internal manchester_encoder_vlg_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -40,6 +42,8 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
+
 
 
 </modelsim_script_timing>
@@ -145,13 +149,14 @@ TRANSITION_LIST("clk2x")
 	NODE
 	{
 		REPEAT = 1;
+		LEVEL 1 FOR 10.0;
 		NODE
 		{
 			REPEAT = 12;
 			LEVEL 0 FOR 40.0;
 			LEVEL 1 FOR 40.0;
 		}
-		LEVEL 0 FOR 40.0;
+		LEVEL 0 FOR 30.0;
 	}
 }
 
@@ -203,8 +208,8 @@ TRANSITION_LIST("rst_n")
 	{
 		REPEAT = 1;
 		LEVEL 1 FOR 30.0;
-		LEVEL 0 FOR 70.0;
-		LEVEL 1 FOR 900.0;
+		LEVEL 0 FOR 60.0;
+		LEVEL 1 FOR 910.0;
 	}
 }
 

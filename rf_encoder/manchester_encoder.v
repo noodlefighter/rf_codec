@@ -1,36 +1,41 @@
-module manchester_encoder (rst_n, clk2x, din, enable, dout, ready);
-    input  rst_n, clk2x, din, enable;
-    output dout, ready;
-    reg    din_buf, state, ready_reg; 
+module manchester_encoder (
+    input  rst_n, clk2x, din, enable,
+    output dout, ready
+);   
 
-    always @(clk2x)
-    begin 
-        if (clk2x) 
-        begin 
-            // posedge
-            din_buf   <= din;   
-            state     <= 0;            
-        end 
-        else begin            
-            // negedge
-            state     <= 1;            
-        end
-    end 
+    reg    odevity, ready_buf, out_buf;
 
-    always @(posedge clk2x or negedge enable or negedge rst_n)
+    always @(posedge clk2x)
     begin
-        if (!rst_n) 
-        begin            
-            ready_reg = 0;  // reset
+        if (!rst_n)
+        begin
+            odevity   <= 0;
+            out_buf   <= 0;
+            ready_buf <= 0;
+        end   
+        else if (!odevity)
+        begin 
+ 
+            /*
+             * odevity == 0, out_buf is din;             
+             */
+            out_buf   <= din;
+            ready_buf <= 1;
+            
+            odevity   <= 1; 
         end
-        else begin
-            if (!enable)
-                ready_reg <= 0;
-            else
-                ready_reg <= enable & clk2x;
-        end
+        else begin 
+
+            /*
+             * odevity == 1, out_buf is ~din
+             */
+            out_buf <= ~din;                 
+            
+            odevity <= 0;
+        end        
     end 
 
-    assign dout  = ready_reg & (state ^ din_buf);  
-    assign ready = ready_reg;
+    assign dout  = (enable) ? out_buf   : 'bz;
+    assign ready = (enable) ? ready_buf : 'bz;
+     
 endmodule
