@@ -7,10 +7,10 @@
 vlib work
 vlog -work work rf_encoder.vo
 vlog -work work Waveform.vwf.vt
-vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.rf_encoder_vlg_vec_tst
+vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.fmiller_encoder_vlg_vec_tst
 vcd file -direction rf_encoder.msim.vcd
-vcd add -internal rf_encoder_vlg_vec_tst/*
-vcd add -internal rf_encoder_vlg_vec_tst/i1/*
+vcd add -internal fmiller_encoder_vlg_vec_tst/*
+vcd add -internal fmiller_encoder_vlg_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -25,10 +25,10 @@ quit -f
 vlib work
 vlog -work work rf_encoder.vo
 vlog -work work Waveform.vwf.vt
-vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.rf_encoder_vlg_vec_tst
+vsim -novopt -c -t 1ps -L cycloneive_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate_ver -L altera_lnsim_ver work.fmiller_encoder_vlg_vec_tst
 vcd file -direction rf_encoder.msim.vcd
-vcd add -internal rf_encoder_vlg_vec_tst/*
-vcd add -internal rf_encoder_vlg_vec_tst/i1/*
+vcd add -internal fmiller_encoder_vlg_vec_tst/*
+vcd add -internal fmiller_encoder_vlg_vec_tst/i1/*
 proc simTimestamp {} {
     echo "Simulation time: $::now ps"
     if { [string equal running [runStatus]] } {
@@ -96,6 +96,16 @@ SIGNAL("din")
 	PARENT = "";
 }
 
+SIGNAL("dout")
+{
+	VALUE_TYPE = NINE_LEVEL_BIT;
+	SIGNAL_TYPE = SINGLE_BIT;
+	WIDTH = 1;
+	LSB_INDEX = -1;
+	DIRECTION = OUTPUT;
+	PARENT = "";
+}
+
 SIGNAL("enable")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
@@ -103,36 +113,6 @@ SIGNAL("enable")
 	WIDTH = 1;
 	LSB_INDEX = -1;
 	DIRECTION = INPUT;
-	PARENT = "";
-}
-
-SIGNAL("fmiller_out")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
-	PARENT = "";
-}
-
-SIGNAL("manch_out")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
-	PARENT = "";
-}
-
-SIGNAL("miller_out")
-{
-	VALUE_TYPE = NINE_LEVEL_BIT;
-	SIGNAL_TYPE = SINGLE_BIT;
-	WIDTH = 1;
-	LSB_INDEX = -1;
-	DIRECTION = OUTPUT;
 	PARENT = "";
 }
 
@@ -175,41 +155,23 @@ TRANSITION_LIST("din")
 	}
 }
 
+TRANSITION_LIST("dout")
+{
+	NODE
+	{
+		REPEAT = 1;
+		LEVEL X FOR 1000.0;
+	}
+}
+
 TRANSITION_LIST("enable")
 {
 	NODE
 	{
 		REPEAT = 1;
 		LEVEL 0 FOR 110.0;
-		LEVEL 1 FOR 820.0;
-		LEVEL 0 FOR 70.0;
-	}
-}
-
-TRANSITION_LIST("fmiller_out")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
-	}
-}
-
-TRANSITION_LIST("manch_out")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
-	}
-}
-
-TRANSITION_LIST("miller_out")
-{
-	NODE
-	{
-		REPEAT = 1;
-		LEVEL X FOR 1000.0;
+		LEVEL 1 FOR 810.0;
+		LEVEL 0 FOR 80.0;
 	}
 }
 
@@ -218,8 +180,8 @@ TRANSITION_LIST("rst_n")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL 1 FOR 40.0;
-		LEVEL 0 FOR 60.0;
+		LEVEL 1 FOR 20.0;
+		LEVEL 0 FOR 80.0;
 		LEVEL 1 FOR 900.0;
 	}
 }
@@ -262,28 +224,10 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "manch_out";
+	CHANNEL = "dout";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 4;
-	TREE_LEVEL = 0;
-}
-
-DISPLAY_LINE
-{
-	CHANNEL = "miller_out";
-	EXPAND_STATUS = COLLAPSED;
-	RADIX = Binary;
-	TREE_INDEX = 5;
-	TREE_LEVEL = 0;
-}
-
-DISPLAY_LINE
-{
-	CHANNEL = "fmiller_out";
-	EXPAND_STATUS = COLLAPSED;
-	RADIX = Binary;
-	TREE_INDEX = 6;
 	TREE_LEVEL = 0;
 }
 
