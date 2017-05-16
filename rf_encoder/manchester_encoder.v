@@ -3,15 +3,14 @@ module manchester_encoder (
     output dout
 );   
 
-    reg    odevity, ready_buf, out_buf;
+    reg    odevity, out_buf;
 
     always @(posedge clk2x)
     begin
         if (!rst_n)
         begin
             odevity   <= 0;
-            out_buf   <= 0;
-            ready_buf <= 0;
+            out_buf   <= 0; 
         end   
         else if (!odevity)
         begin 
@@ -19,9 +18,7 @@ module manchester_encoder (
             /*
              * odevity == 0, out_buf is din;             
              */
-            out_buf   <= din;
-            ready_buf <= 1;
-            
+            out_buf   <= din;  
             odevity   <= 1; 
         end
         else begin 
@@ -29,13 +26,11 @@ module manchester_encoder (
             /*
              * odevity == 1, out_buf is ~din
              */
-            out_buf <= ~din;                 
-            
+            out_buf <= ~din;    
             odevity <= 0;
         end        
     end 
 
-    assign dout  = (enable) ? out_buf   : 'bz;
-    assign ready = (enable) ? ready_buf : 'bz;
+    assign dout  = (enable) ? out_buf   : 'bz; 
      
 endmodule
