@@ -13,11 +13,40 @@ module fmiller_decoder (
 
     always @ (posedge din or negedge clk1x) 
     begin
-        if (flg && !clk1x) 
-            flg <= 0;            
+        if(flg) 
+        begin
+            if(clk1x == 0) begin
+                flg <= 0;
+            end
+        end 
         else if(din) 
+        begin
             flg <= 1;
+        end
     end
+
+    // always @ (posedge din or negedge clk1x) 
+    // begin 
+    //     if (flg)
+    //     begin
+    //         if (clk1x == 0)
+    //         begin
+    //             flg <= 0;
+    //         end
+    //     end
+    //     else if (din)
+    //     begin
+    //         flg <= 1;
+    //     end        
+    //     // if (!clk1x) 
+    //     // begin             
+    //     //     if (din) flg <= ~flg;            
+    //     // end
+    //     // else if(din)
+    //     // begin
+    //     //     flg <= 1;
+    //     // end
+    // end
 
     always @(posedge clk1x)
     begin
