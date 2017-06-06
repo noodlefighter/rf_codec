@@ -3,7 +3,7 @@ module miller_encoder (
     output dout
 );   
     
-    reg    odevity, ready_buf, out_buf; 
+    reg    odevity, ready_buf, out_buf, last_din; 
 
     always @(posedge clk2x)
     begin
@@ -13,6 +13,7 @@ module miller_encoder (
             odevity   <= 0;
             out_buf   <= 0;
             ready_buf <= 0;
+            last_din  <= 1;
         end  
         else if (!odevity)
         begin 
@@ -26,7 +27,8 @@ module miller_encoder (
              */
             if (!din)
             begin
-                out_buf   <= ~out_buf;
+                if (last_din == 0)
+                    out_buf   <= ~out_buf;
                 ready_buf <= 1;
             end
             
@@ -44,7 +46,8 @@ module miller_encoder (
             if (din)
                 out_buf <= ~out_buf;                 
             
-            odevity <= 0;
+            last_din <= din;
+            odevity  <= 0;
         end
     end
  
